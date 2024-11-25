@@ -71291,7 +71291,7 @@ L03b47a:
 	jsr	(L025904)
 	tst.b	d0
 	beq	L03b49c
-	andi.b	#$00,ccr
+	andi.b	#$e0,ccr
 L03b49c:
 	rts
 
