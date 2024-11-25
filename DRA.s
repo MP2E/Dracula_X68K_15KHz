@@ -910,7 +910,7 @@ L000d66:
 	move.w	#$0000,($00e82400)
 	move.w	#$18e4,($00e82500)
 	move.w	#$1f61,($00e82600)
-	move.w	#$0010,($00e80028)
+	move.w	#$0000,($00e80028)
 	move.w	#$0100,(L0470ee)
 	move.w	#$0000,(L0470f2)
 	move.w	#$0001,(L047f70)
@@ -1183,13 +1183,15 @@ L0011ce:
 	rts
 
 L0011da:
-	move.w	#$010a,d1
+	move.w	#$010b,d1
 	movem.l	a0/a5,-(a7)
 	suba.l	a5,a5
 	movea.l	($00000440).l,a0
 	jsr	(a0)
 	movem.l	(a7)+,a0/a5
 	move.w	#$0000,(L04711e)
+	move.w  #$0113,($00e80008)
+	move.w  #$0110,($00e8000e)
 	move.w	#$0300,($00e80014)
 	move.w	#$0000,($00e80016)
 	move.w	#$0000,($00e82200)
@@ -1644,7 +1646,7 @@ L0018da:
 	move.b	#$60,($00e82601)
 L0018f0:
 	clr.w	($00e80014)
-	move.w	#$0068,($00e80012)
+	move.w	#$0030,($00e80012)
 L0018fe:
 	clr.w	(L047128)
 	lea.l	(L0470ee),a0
@@ -1683,8 +1685,7 @@ L00197e:
 	subq.w	#1,d0
 	move.w	d0,(L0471aa)
 	beq	L00195e
-	btst.l	#$00,d0
-	bne	L0019c4
+	asl.w   #1,d0
 	lea.l	(L0471ae),a0
 	tst.b	(L0472b1)
 	bne	L0019b4
@@ -1694,7 +1695,6 @@ L0019b4:
 	lsr.w	#5,d0
 	andi.w	#$01ff,d0
 	move.w	d0,(L0472ac)
-L0019c4:
 	movem.l	(a7)+,d0/a0
 	rte
 
@@ -1706,11 +1706,9 @@ L0019ca:
 	subq.w	#1,d0
 	move.w	d0,(L0471aa)
 	beq	L001952
-	btst.l	#$00,d0
-	bne	L001a08
+	asl.w   #1,d0
 	lea.l	(L0471ae),a0
 	move.w	(a0,d0.w),(L0472ac)
-L001a08:
 	movem.l	(a7)+,d0/a0
 	rte
 
@@ -1755,14 +1753,17 @@ L001a4e:
 	move.w	d0,(L04712a)
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0096,($00e80012)
-	move.w	#$0028,(L0471aa)
+	move.w	#$0047,($00e80012)
+	move.w	#$0014,(L0471aa)
 	move.l	#L00197e,($0000013c).l
 	andi.b	#$df,($00e88009)
 	bset.b	#$07,($00e88007)
 L001aa8:
 	tst.b	($00e88001)
-	bpl	L001aa8
+	bmi	L001aa8
+L001aa8_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001aa8_waitForHBlank
 	move.w	#$094e,($00e82500)
 	cmpi.w	#$0100,(L047f7a)
 	bcs	L001ace
@@ -1776,14 +1777,14 @@ L001ada:
 	lsr.w	#2,d0
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0118,($00e80012)
+	move.w	#$0088,($00e80012)
 	bra	L002240
 L001af8:
 	move.w	(L0470ee),d0
 	lsr.w	#1,d0
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$01d8,($00e80012)
+	move.w	#$00e8,($00e80012)
 	bra	L002240
 L001b16:
 	move.w	#$006c,($00e82600)
@@ -1794,14 +1795,17 @@ L001b22:
 	bcc	L001ba2
 L001b2e:
 	tst.b	($00e88001)
-	bpl	L001b2e
+	bmi	L001b2e
+L001b2e_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001b2e_waitForHBlank
 	move.b	#$6f,($00e82601)
 	move.w	#$09e4,($00e82500)
 	move.w	(L0472f6),d0
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$00c6,($00e80012)
-	move.w	#$0058,(L0471aa)
+	move.w	#$005f,($00e80012)
+	move.w	#$002c,(L0471aa)
 	move.l	#L00197e,($0000013c).l
 	andi.b	#$df,($00e88009)
 	bset.b	#$07,($00e88007)
@@ -1811,24 +1815,27 @@ L001b84:
 	lsr.w	#2,d0
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0148,($00e80012)
+	move.w	#$00a0,($00e80012)
 	bra	L002240
 L001ba2:
 	move.w	(L0470ee),d0
 	lsr.w	#1,d0
 	and.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0208,($00e80012)
+	move.w	#$0100,($00e80012)
 	bra	L002240
 L001bc0:
 	cmpi.w	#$0001,(L047128)
 	beq	L001bee
 L001bca:
 	tst.b	($00e88001)
-	bpl	L001bca
+	bmi	L001bca
+L001bca_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001bca_waitForHBlank
 	move.w	#$1f6f,($00e82600)
 	move.w	#$18e4,($00e82500)
-	move.w	#$01e6,($00e80012)
+	move.w	#$00ef,($00e80012)
 	bra	L002240
 L001bee:
 	bra	L002240
@@ -1842,7 +1849,10 @@ L001c00:
 	beq	L001c7a
 L001c0a:
 	tst.b	($00e88001)
-	bpl	L001c0a
+	bmi	L001c0a
+L001c0a_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001c0a_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$09e4,($00e82500)
 	move.w	#$0100,($00e80014)
@@ -1857,7 +1867,7 @@ L001c0a:
 	move.l	(a0)+,(a1)+
 	move.l	(a0)+,(a1)+
 	move.l	(a0)+,(a1)+
-	move.w	#$0226,($00e80012)
+	move.w	#$010f,($00e80012)
 	bra	L002240
 L001c56:
 	moveq.l	#$00,d0
@@ -1870,7 +1880,7 @@ L001c56:
 	move.l	d0,(a1)+
 	move.l	d0,(a1)+
 	move.l	d0,(a1)+
-	move.w	#$0226,($00e80012)
+	move.w	#$010f,($00e80012)
 	bra	L002240
 L001c7a:
 	move.w	#$0000,($00e80014)
@@ -1890,7 +1900,10 @@ L001ca2:
 	lea.l	($00e82600),a0
 L001cac:
 	tst.b	($00e88001)
-	bpl	L001cac
+	bmi	L001cac
+L001cac_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001cac_waitForHBlank
 	move.w	d0,(a0)
 	move.w	#$09e4,(-$0100,a0)
 	bra	L002240
@@ -1899,10 +1912,13 @@ L001cc0:
 	beq	L001cee
 L001cca:
 	tst.b	($00e88001)
-	bpl	L001cca
+	bmi	L001cca
+L001cca_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001cca_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$0226,($00e80012)
+	move.w	#$010f,($00e80012)
 	bra	L002240
 L001cee:
 	move.w	#$12e4,($00e82500)
@@ -1912,14 +1928,20 @@ L001cfa:
 	beq	L001d28
 L001d04:
 	tst.b	($00e88001)
-	bpl	L001d04
+	bmi	L001d04
+L001d04_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001d04_waitForHBlank
 	move.w	#$0000,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L001d28:
 	tst.b	($00e88001)
-	bpl	L001d28
+	bmi	L001d28
+L001d28_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001d28_waitForHBlank
 	move.w	#$12e4,($00e82500)
 	move.w	#$0060,($00e82600)
 	bra	L002240
@@ -1928,14 +1950,20 @@ L001d44:
 	beq	L001d72
 L001d4e:
 	tst.b	($00e88001)
-	bpl	L001d4e
+	bmi	L001d4e
+L001d4e_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001d4e_waitForHBlank
 	move.w	#$004f,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L001d72:
 	tst.b	($00e88001)
-	bpl	L001d72
+	bmi	L001d72
+L001d72_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001d72_waitForHBlank
 	move.w	#$12e4,($00e82500)
 	move.w	#$006f,($00e82600)
 	bra	L002240
@@ -1944,14 +1972,20 @@ L001d8e:
 	beq	L001dbc
 L001d98:
 	tst.b	($00e88001)
-	bpl	L001d98
+	bmi	L001d98
+L001d98_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001d98_waitForHBlank
 	move.w	#$0043,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L001dbc:
 	tst.b	($00e88001)
-	bpl	L001dbc
+	bmi	L001dbc
+L001dbc_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001dbc_waitForHBlank
 	move.w	#$12e4,($00e82500)
 	move.w	#$0063,($00e82600)
 	bra	L002240
@@ -1960,10 +1994,13 @@ L001dd8:
 	beq	L001e06
 L001de2:
 	tst.b	($00e88001)
-	bpl	L001de2
+	bmi	L001de2
+L001de2_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001de2_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$01c8,($00e80012)
+	move.w	#$00e0,($00e80012)
 	bra	L002240
 L001e06:
 	btst.b	#$00,(L0472f7)
@@ -1975,15 +2012,21 @@ L001e1e:
 	beq	L001e54
 L001e28:
 	tst.b	($00e88001)
-	bpl	L001e28
+	bmi	L001e28
+L001e28_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001e28_waitForHBlank
 	move.w	#$006f,($00e82600)
 	bset.b	#$00,($00eb0809)
 	bset.b	#$03,($00eb0809)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L001e54:
 	tst.b	($00e88001)
-	bpl	L001e54
+	bmi	L001e54
+L001e54_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001e54_waitForHBlank
 	bclr.b	#$00,($00eb0809)
 	bclr.b	#$03,($00eb0809)
 	bra	L002240
@@ -1992,20 +2035,26 @@ L001e70:
 	beq	L001e9e
 L001e7a:
 	tst.b	($00e88001)
-	bpl	L001e7a
+	bmi	L001e7a
+L001e7a_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001e7a_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$00b8,($00e80012)
+	move.w	#$0058,($00e80012)
 	bra	L002240
 L001e9e:
-	move.w	#$00fe,(L0471aa)
+	move.w	#$007f,(L0471aa)
 	move.l	#L0019ca,($0000013c).l
 	andi.b	#$df,($00e88009)
 	bset.b	#$07,($00e88007)
 	bra	L002240
 L001ec4:
 	tst.b	($00e88001)
-	bpl	L001ec4
+	bmi	L001ec4
+L001ec4_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001ec4_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$094e,($00e82500)
 	bra	L002240
@@ -2014,10 +2063,13 @@ L001ee0:
 	beq	L001f0e
 L001eea:
 	tst.b	($00e88001)
-	bpl	L001eea
+	bmi	L001eea
+L001eea_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001eea_waitForHBlank
 	move.w	#$006f,($00e82600)
 	move.w	#$09e4,($00e82500)
-	move.w	#$01f8,($00e80012)
+	move.w	#$00f8,($00e80012)
 	bra	L002240
 L001f0e:
 	move.w	#$002f,($00e82600)
@@ -2027,7 +2079,10 @@ L001f1a:
 	beq	L001f6a
 L001f24:
 	tst.b	($00e88001)
-	bpl	L001f24
+	bmi	L001f24
+L001f24_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001f24_waitForHBlank
 	move.w	#$1f63,($00e82600)
 	move.w	#$18e4,($00e82500)
 	bset.b	#$00,($00eb0809)
@@ -2036,7 +2091,7 @@ L001f24:
 	lsr.w	#3,d0
 	andi.w	#$01ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L001f6a:
 	tst.b	($00e88001)
@@ -2052,25 +2107,31 @@ L001f8e:
 	bne	L001fc2
 L001f96:
 	tst.b	($00e88001)
-	bpl	L001f96
+	bmi	L001f96
+L001f96_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001f96_waitForHBlank
 	bset.b	#$00,($00eb0809)
 	move.w	#$0063,($00e82600)
 	move.w	#$18e4,($00e82500)
-	move.w	#$0170,($00e80012)
+	move.w	#$00b4,($00e80012)
 	bra	L002240
 L001fc2:
 	cmpi.w	#$0018,d0
 	beq	L001ffc
-	asl.w	#3,d0
-	add.w	#$0170,d0
+	asl.w	#2,d0
+	add.w	#$00b4,d0
 	move.w	d0,($00e80012)
-	sub.w	#$0170,d0
-	lsr.w	#2,d0
+	sub.w	#$00b4,d0
+	lsr.w	#1,d0
 	lea.l	(L04712a),a0
 	move.w	(a0,d0.w),d0
 L001fe4:
 	tst.b	($00e88001)
-	bpl	L001fe4
+	bmi	L001fe4
+L001fe4_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L001fe4_waitForHBlank
 	move.w	d0,($00e80018)
 	move.w	d0,($00e8001c)
 	bra	L002240
@@ -2079,7 +2140,10 @@ L001ffc:
 	bclr.b	#$00,($00eb0809)
 L00200a:
 	tst.b	($00e88001)
-	bpl	L00200a
+	bmi	L00200a
+L00200a_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L00200a_waitForHBlank
 	move.w	d0,($00e80018)
 	move.w	d0,($00e8001c)
 	move.w	(L0472f6),d0
@@ -2112,8 +2176,7 @@ L002062:
 	move.w	#$1f61,($00e82600)
 	cmpi.w	#$0100,d0
 	bcc	L0020dc
-	add.w	d0,d0
-	add.w	#$0028,d0
+	add.w	#$0010,d0
 	move.w	d0,($00e80012)
 	bra	L002240
 L0020aa:
@@ -2124,9 +2187,9 @@ L0020aa:
 	move.w	(a1,d0.w),($00e82500)
 	move.w	($02,a1,d0.w),($00e82600)
 	move.w	#$0000,($00e82400)
-	move.w	#$0010,($00e80028)
+	move.w	#$0000,($00e80028)
 L0020dc:
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	move.w	#$0001,(L047128)
 	bra	L002240
 L0020f0:
@@ -2144,7 +2207,10 @@ L002120:
 	lea.l	($00e82600),a0
 L00212a:
 	tst.b	($00e88001)
-	bpl	L00212a
+	bmi	L00212a
+L00212a_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L00212a_waitForHBlank
 	move.w	d0,(a0)
 	move.w	#$094e,(-$0100,a0)
 	bra	L002240
@@ -2153,13 +2219,19 @@ L00213e:
 	beq	L002164
 L002148:
 	tst.b	($00e88001)
-	bpl	L002148
+	bmi	L002148
+L002148_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L002148_waitForHBlank
 	bset.b	#$00,($00eb0809)
-	move.w	#$0228,($00e80012)
+	move.w	#$0110,($00e80012)
 	bra	L002240
 L002164:
 	tst.b	($00e88001)
-	bpl	L002164
+	bmi	L002164
+L002164_waitForHBlank:
+	tst.b	($00e88001)
+	bpl	L002164_waitForHBlank
 	bclr.b	#$00,($00eb0809)
 	bra	L002240
 L002178:
@@ -2180,7 +2252,7 @@ L002194:
 	neg.w	d0
 	and.w	#$00ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$00b8,($00e80012)
+	move.w	#$0058,($00e80012)
 	bra	L002240
 L0021b4:
 	move.w	(L0472f6),d0
@@ -2188,7 +2260,7 @@ L0021b4:
 	neg.w	d0
 	and.w	#$00ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$00f8,($00e80012)
+	move.w	#$0078,($00e80012)
 	bra	L002240
 L0021d2:
 	move.w	(L0472f6),d0
@@ -2196,7 +2268,7 @@ L0021d2:
 	neg.w	d0
 	and.w	#$00ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0128,($00e80012)
+	move.w	#$0090,($00e80012)
 	bra	L002240
 L0021f0:
 	move.w	(L0472f6),d0
@@ -2204,14 +2276,14 @@ L0021f0:
 	neg.w	d0
 	and.w	#$00ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$0168,($00e80012)
+	move.w	#$00b0,($00e80012)
 	bra	L002240
 L00220e:
 	move.w	(L0472f6),d0
 	lsr.w	#2,d0
 	and.w	#$00ff,d0
 	move.w	d0,($00e80014)
-	move.w	#$01c8,($00e80012)
+	move.w	#$00e0,($00e80012)
 	bra	L002240
 L00222a:
 	move.w	(L0472f6),d0
@@ -19471,7 +19543,7 @@ L010b20:
 	move.w	#$0200,($00eb0808)
 	move.w	#$0000,($00e82600)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	move.w	#$0000,(L0472b0)
 	jsr	(L04376a)
 	jsr	(L0436d8)
@@ -19697,7 +19769,7 @@ L010f3e:
 	jsr	(L023c26)
 	move.w	#$0060,($00e82600)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	jsr	(L043694)
 	move.w	#$0002,(L0472fa)
 	clr.w	(L04731e)
@@ -20231,7 +20303,7 @@ L011682:
 	clr.w	(L047126)
 	move.w	#$0060,($00e82600)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	jsr	(L04376a)
 	jsr	(L0436d8)
 	bsr	L0110ae
@@ -41536,7 +41608,7 @@ L0241e0:
 	move.w	#$0002,(L0472fa)
 	move.w	#$0200,($00eb0808)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	jsr	(L04376a)
 	jsr	(L043694)
 	clr.l	d0
@@ -76887,7 +76959,7 @@ L041c3a:
 	move.w	(L0472f0),d0
 	bne	L041c78
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	move.w	#$0200,($00eb0808)
 	jsr	(L04376a)
 	clr.w	(L03d83a)
@@ -76912,7 +76984,7 @@ L041ca6:
 	bcc	L041daa
 	bsr	L04326e
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	move.w	#$0008,(L0472fa)
 	move.w	#$0000,(L047124)
 	bra	L043266
@@ -76986,7 +77058,7 @@ L041e04:
 	beq	L041e6c
 	bcc	L041f90
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	jsr	(L041a92)
 	jsr	(L0432d8)
 	move.w	#$0000,(L0472f2)
@@ -77217,7 +77289,7 @@ L042144:
 	clr.w	($00e80014)
 	move.w	#$0060,($00e82600)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	jsr	(L04376a)
 	rts
 
@@ -77663,7 +77735,7 @@ L0428ac:
 	bra	L043266
 L0428c8:
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	move.w	#$0200,($00eb0808)
 	jsr	(L043694)
 	bsr	L04293c
@@ -77925,7 +77997,7 @@ L042cfe:
 	bsr	L04326e
 	move.w	#$0060,($00e82600)
 	move.w	#$0001,($00e82400)
-	move.w	#$0110,($00e80028)
+	move.w	#$0100,($00e80028)
 	move.w	#$0007,(L047124)
 	move.w	#$0002,(L0472fa)
 	move.w	#$fff0,(L0473f4)
