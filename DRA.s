@@ -77,7 +77,7 @@ L000096:
 	trap	#0
 L0000f0:
 	tst.w	d7
-	beq	L00010c
+	bra	L00010c
 L0000f4:
 	btst.b	#$04,($00e88001)
 	beq	L0000f4
