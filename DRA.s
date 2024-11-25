@@ -43648,7 +43648,7 @@ L025d2e:
 L025d56:
 	move.w	(L047fb0),d0
 	beq	L025d94
-	subq.w	#1,d0
+	moveq.l	#$0,d0
 	move.w	d0,(L047fb0)
 	andi.w	#$0007,d0
 	bne	L025d94
