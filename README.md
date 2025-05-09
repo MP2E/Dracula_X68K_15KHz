@@ -1,5 +1,5 @@
 # Akumajou Dracula (X68000) 15KHz Version
-This is a hack that allows you to play Akumajou Dracula on real 15KHz displays, tested with a real Sharp X68000 Compact. The full game is required to be able to run this hack.
+This is a hack that allows anyone to play Akumajou Dracula on 15KHz displays, tested with a real Sharp X68000 Compact. The full game is required to be able to run this hack.
 
 # Installing
 Download the release zip and rename DRA15k.X or DRA15kEZ.X to DRA.X. Then copy to the Akumajou Dracula Disk 1 floppy, overwriting the old DRA.X. Run the game by mounting both Akumajou Dracula floppy disks and starting your system. Also compatible running off SxSI hard drive images.
