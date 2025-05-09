@@ -55,10 +55,6 @@ L000000:
 	movea.l	($00000704).l,a0
 	jsr	(a0)
 	movem.l	(a7)+,a0/a5
-	jsr	(L0034ca)
-	cmpi.b	#$01,(L00354c)
-L000096:
-	beq	L000096
 	jsr	(L001212)
 	jsr	(L001326)
 	jsr	(L0013b4)
@@ -1198,7 +1194,6 @@ L0011da:
 	rts
 
 L001212:
-	jsr	(L03cb02)
 	tst.b	(L00354c)
 	bne	L001226
 	jsr	(L03cbac)
@@ -3426,11 +3421,11 @@ L003542:
 	rts
 
 L00354c:
-	.dc.b	$43
+	.dc.b	' '
 L00354d:
-	.dc.b	':¥RA960'
+	.dc.b	'       '
 L003554:
-	.dc.b	$5c
+	.dc.b	' '
 L003555:
 	.dc.b	'            ',$00
 L003562:
@@ -72963,7 +72958,6 @@ L03cae4:
 	jsr	(a0)
 	movem.l	(a7)+,a0/a5
 	bsr	L03cc2a
-L03cb02:
 	move.w	#$9000,d1
 	move.w	#$0004,d2
 	movem.l	a0/a5,-(a7)
