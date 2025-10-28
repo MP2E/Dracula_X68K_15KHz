@@ -4,6 +4,7 @@ ASFLAGS = -w
 LD      = $(RUN68) x68k_bin/hlkx.r
 LDFLAGS =
 CONV    = $(RUN68) x68k_bin/u8tosj.r
+LZX     = $(RUN68) x68k_bin/LZX.X
 
 SRCS              = DRA.s
 SRCS_INTERMEDIATE = $(addprefix $(INTERMEDIATE_DIR)/,$(SRCS))
@@ -18,6 +19,7 @@ all: $(DRA_X)
 
 $(DRA_X): $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^
+	$(LZX) $@
 
 clean:
 	rm -f $(DRA_X) $(OBJS)
